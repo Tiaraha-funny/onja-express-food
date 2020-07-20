@@ -1,12 +1,16 @@
 console.log('good luck!');
 
 //drag all the elements needed
+
 const addOrderBtn = document.querySelector('.add-order');
 const outerModal = document.querySelector('.form_modal_outer');
 const innerModal = document.querySelector('.form_modal_inner');
 const orderList = document.querySelector('.order-list');
+const deleteBtn = document.querySelector('.served');
+const inputName = document.getElementById(name)
 
 // create HTML for the form
+
 const myFormHTML =  `
     <h2>Add an order</h2>
     <form>
@@ -52,7 +56,7 @@ const myFormHTML =  `
     `
 
 //opening the modal form
-    
+
 const openModal = e => {
     outerModal.classList.add('open');
     innerModal.innerHTML = myFormHTML;
@@ -73,19 +77,23 @@ const handleEscape = e => {
     }
 };
 
-// create the HTML after clicking the add order list
+// create the HTML to add the order list by clicking the submit button
+
+const title = document.querySelector('.title');
 
 let mySubmitHTML =  `
-        <div class="order" data-dish="romazava" data-size="large" data-amount="2">
-                <span class="title">
-                    Petah Jeannie
-                </span>
-                <button class="details">Details</button>
-               <button class="served">Delete order</button>
-            </div>
-    `    
+    <div class="order" data-dish="romazava" data-size="large" data-amount="2">
+        <span class="title">
+            ${title.value}
+        </span>
+        <button class="details">Details</button>
+        <button class="served">Delete order</button>
+    </div>
+`    
 ;
+
 //crete the HTML after clicking the details button
+
 let myDetailsHTML = `
 <div class="form_modal_outer">
     <div class="form_modal_inner">
@@ -94,27 +102,53 @@ let myDetailsHTML = `
     </div>
 </div>
 `
+
 //event delegation for the submit button
 
 window.addEventListener('click', (e) => {
-    console.log('details buton is clicked');
+    console.log('submit buton is clicked');
+
     if(e.target.matches('button.submitOrder')) {
-        console.log('submit me');
+               console.log('submit me');
         e.preventDefault();
         orderList.insertAdjacentHTML('afterbegin', mySubmitHTML);
         outerModal.classList.remove('open');
-    } 
-    if (e.target.matches('details')) {
+    }
+
+    if (e.target.matches('button.details')) {
+        console.log('detail button is clicked');
         //open the modal
-        outerModal.classList.add('open');
-        innerModal.innerHTML = myDetailsHTML;
+         outerModal.classList.add('open');
+         innerModal.innerHTML = myDetailsHTML;
+    }
+});
+
+// creating the delegation submit if it matches the form it should give the details from the value
+
+window.addEventListener('submit', (e) => {
+    console.log('detail button is clicked');
+    if (e.target.matches('form')) {
+        console.log('detail button is clicked');
+        //open the modal
+         outerModal.classList.add('open');
+         const form = e.target;
+         form.name.value;
+         form.dish.value;
+         form.size.value;
+         form.amount.value;
     }
 })
 
+//deleting the all order lists
+
+deleteBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    outerModal.classList.remove('open');
+    orderList.remove(mySubmitHTML);
+})
 
 //accessing the function
 
 window.addEventListener('keydown', handleEscape);
 outerModal.addEventListener('click', handleClick);
 addOrderBtn.addEventListener('click', openModal);
-
